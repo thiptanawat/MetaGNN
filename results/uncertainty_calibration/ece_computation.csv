@@ -1,0 +1,6 @@
+method,ece_value,n_bins
+MetaGNN,0.041,10
+GIMME,0.089,10
+iMAT,0.075,10
+CORDA,0.062,10
+tINIT,0.058,10

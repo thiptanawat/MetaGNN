@@ -1,0 +1,6 @@
+pathway,n_reactions,mean_score,median_score,std_score,q25,q75,pct_above_threshold
+Glycolysis_Gluconeogenesis,120,0.8386,0.8715,0.1245,0.7771,0.9405,1.0
+TCA_Cycle,85,0.7532,0.784,0.1678,0.6419,0.9001,1.0
+Fatty_Acid_Metabolism,200,0.5531,0.5505,0.1645,0.4416,0.6678,0.99
+Amino_Acid_Metabolism,310,0.6613,0.685,0.1871,0.5278,0.8166,0.9903
+Nucleotide_Metabolism,95,0.4575,0.4472,0.1853,0.3073,0.5901,0.9789
