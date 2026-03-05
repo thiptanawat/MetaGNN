@@ -97,7 +97,7 @@ topology-aware message passing.
 
 ### Dataset
 
-- **Patients:** 690 TCGA-CRC patients with RNA-seq; 197 with matched CPTAC TMT proteomics
+- **Patients:** 690 TCGA-CRC patients with RNA-seq; 95 with matched CPTAC TMT proteomics
 - **Labels:** Expression-thresholded consensus via GPR OR-logic + cohort majority vote
   - 7,434 active / 3,166 inactive reactions (70.1% active)
 - **Split:** 482 train / 104 validation / 104 test (patient-level, no leakage)
