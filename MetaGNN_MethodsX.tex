@@ -34,7 +34,7 @@
 \noindent\textbf{Journal:} MethodsX (Elsevier)
 
 \begin{abstract}
-Genome-scale metabolic models (GEMs) provide mechanistic descriptions of cellular metabolism that transcriptomics or proteomics alone cannot deliver, yet reconstructing patient-specific models from the human reference network Recon3D remains a long-standing bottleneck. Established algorithms for this task, including GIMME, iMAT, CORDA, and tINIT, score each reaction from the expression of its encoding genes without reference to the surrounding network topology. Here we present MetaGNN, an open-source framework that reformulates patient-specific GEM reconstruction as a supervised node classification problem on a heterogeneous bipartite graph. The framework encodes Recon3D as a directed graph of 10,600 reaction nodes and 5,835 metabolite nodes connected by 40,425 stoichiometric edges, propagates patient-specific multi-omics features through GATv2 attention layers with type-specific message passing, and produces per-reaction activity scores that serve as personalised flux constraints. We describe the complete pipeline, from automated data acquisition through graph construction, model training, and uncertainty-aware inference via Monte Carlo Dropout, and demonstrate its execution on 690 TCGA colorectal cancer patients, achieving a test AUROC of 0.87 and F1 of 0.81 against expression-thresholded pseudo-labels (not ground-truth flux data)---substantially outperforming a topology-naive GPR threshold baseline (AUROC 0.47)---and recovering known CRC metabolic signatures across 88 metabolic subsystems without subsystem-level supervision. All source code, environment specifications, and pre-processed data are released under the MIT licence at \url{https://github.com/thiptanawat/MetaGNN}. This article provides sufficient procedural detail for independent reproduction and adaptation to other cancer types or metabolic contexts.
+Genome-scale metabolic models (GEMs) provide mechanistic descriptions of cellular metabolism that transcriptomics or proteomics alone cannot deliver, yet reconstructing patient-specific models from the human reference network Recon3D remains a long-standing bottleneck. Established algorithms for this task, including GIMME, iMAT, CORDA, and tINIT, score each reaction from the expression of its encoding genes without reference to the surrounding network topology. Here we present MetaGNN, an open-source framework that reformulates patient-specific GEM reconstruction as a supervised node classification problem on a heterogeneous bipartite graph. The framework encodes Recon3D as a directed graph of 10,600 reaction nodes and 5,835 metabolite nodes connected by 40,425 stoichiometric edges, propagates patient-specific multi-omics features through GATv2 attention layers with type-specific message passing, and produces per-reaction activity scores that serve as personalised flux constraints. We describe the complete pipeline, from automated data acquisition through graph construction, model training, and uncertainty-aware inference via Monte Carlo Dropout, and demonstrate its execution on 690 TCGA colorectal cancer patients, achieving a test AUROC of 0.87 and F1 of 0.81 against cohort-consensus expression-thresholded pseudo-labels (a single shared label vector derived by majority vote across the cohort, not ground-truth flux data)---substantially outperforming a topology-naive GPR threshold baseline (AUROC 0.47)---and recovering known CRC metabolic signatures across 88 metabolic subsystems without subsystem-level supervision. All source code, environment specifications, and pre-processed data are released under the MIT licence at \url{https://github.com/thiptanawat/MetaGNN}. This article provides sufficient procedural detail for independent reproduction and adaptation to other cancer types or metabolic contexts.
 \end{abstract}
 
 \vspace{0.3cm}
@@ -90,7 +90,9 @@ Attempts to quantify this limitation empirically have shown that context-specifi
 
 Graph Neural Networks (GNNs) offer a natural framework for incorporating network topology into reaction scoring. By propagating information along the edges of a graph, a GNN allows every node to be scored in the context of its biochemical neighbourhood. This idea is not without precedent in the metabolic modelling literature. Alghamdi et al.\ (2021) developed scFEA, which uses a graph neural network to estimate cell-wise metabolic fluxes from single-cell RNA-seq data. However, scFEA operates on a manually curated reduced metabolic map of 168 modules (not a genome-scale network), targets continuous flux estimation (not binary reaction activity prediction), and processes single-cell rather than bulk patient-level profiles; it therefore addresses a fundamentally different problem from patient-specific GEM reconstruction. Nonetheless, scFEA demonstrates that GNNs can capture the nonlinear relationship between gene expression and metabolic activity. Hasibi et al.\ (2024) showed that a Graph Attention Network applied to gene-reaction graphs achieves gene essentiality prediction approaching FBA-level accuracy. Xin et al.\ (2023) demonstrated that hypergraph neural networks can impute missing reactions in microbial GEMs from network structure alone, with follow-up work by CLOSEgaps \cite{CLOSEgaps2024} and Multi-HGNN \cite{MultiHGNN2025} further advancing gap-filling performance. Most recently, Fan et al.\ (2025) \cite{Fan2025} used GNNs to predict thermodynamic properties of metabolic reactions, revealing that network topology encodes meaningful information about reaction energetics---providing independent theoretical support for topology-aware approaches. In the cancer multi-omics space, Tabakhi et al.\ (2024) \cite{Tabakhi2024} demonstrated that heterogeneous graph attention networks outperform homogeneous alternatives for integrating multiple omics modalities.
 
-However, none of these studies addresses the specific problem of patient-specific human GEM reconstruction from clinical multi-omics data, which poses several additional challenges. The graph is substantially larger than those in microbial studies (Recon3D: 10,600 reactions vs.\ FlowGAT's 444 \textit{E.\ coli} nodes). No patient-level ground-truth flux measurements exist at scale, requiring surrogate supervision strategies. The integration of heterogeneous multi-omics data types (gene expression, protein abundance) onto a heterogeneous graph (reaction and metabolite nodes with typed edges) is non-trivial when each data modality carries independent and partially overlapping information about enzyme activity. And the clinical application---colorectal cancer---demands patient-specific (not population-level) predictions.
+In adjacent work, Rana et al.\ (2020) \cite{Rana2020} developed DeepMeta, which applies deep learning to metabolic network features for individual-sample cancer classification, and Ferreira et al.\ (2024) \cite{Ferreira2024} released TROPPO, an open-source ecosystem for context-specific metabolic reconstruction. However, DeepMeta targets patient classification (not reaction-level reconstruction), and TROPPO wraps existing thresholding algorithms (FASTCORE, tINIT) without introducing topology-aware scoring.
+
+None of the above studies addresses the specific problem of patient-specific human GEM reconstruction from clinical multi-omics data using graph neural networks, which poses several additional challenges. The graph is substantially larger than those in microbial studies (Recon3D: 10,600 reactions vs.\ FlowGAT's 444 \textit{E.\ coli} nodes). No patient-level ground-truth flux measurements exist at scale, requiring surrogate supervision strategies. The integration of heterogeneous multi-omics data types (gene expression, protein abundance) onto a heterogeneous graph (reaction and metabolite nodes with typed edges) is non-trivial when each data modality carries independent and partially overlapping information about enzyme activity. And the clinical application---colorectal cancer---demands patient-specific (not population-level) predictions.
 
 \subsection{Contribution}
 
@@ -129,7 +131,7 @@ bash run.sh
 
 \subsection{Module 1: Data Acquisition}
 
-The \texttt{download\_data.py} script automates retrieval of all required datasets:
+The data acquisition script automates retrieval of all required datasets:
 
 \begin{itemize}
 \item \textbf{Recon3D v3} (SBML/XML format, 27 MB) from the Virtual Metabolic Human database.
@@ -171,11 +173,11 @@ CPTAC TMT-labelled protein abundance values were log-transformed and mapped to r
 
 \subsubsection{Metabolite Node Features}
 
-Metabolite nodes carry physico-chemical descriptors (molecular weight, hydrogen bonding potential, topological polar surface area) pre-computed using RDKit from ChEBI SMILES strings. These features are patient-invariant and provide baseline structural information for metabolite nodes during message passing.
+Metabolite nodes carry a 519-dimensional descriptor vector pre-computed using RDKit from ChEBI SMILES strings: 7 physico-chemical properties (molecular weight, LogP, hydrogen bond acceptors, hydrogen bond donors, topological polar surface area, ring count, formal charge) and 512-bit Morgan fingerprints (radius 2, nBits = 512). These features are patient-invariant and provide structural and chemical similarity information for metabolite nodes during message passing.
 
 \subsubsection{Patient Tensor Creation}
 
-The preprocessing script (\texttt{preprocess\_data.py}) produces one PyTorch \texttt{.pt} file per patient, containing the patient-specific reaction node features and shared metabolite features in the HeteroData format expected by the training script. For the TCGA-CRC cohort, this yields 690 patient tensors plus the shared graph structure file.
+The preprocessing script (\texttt{code/02\_data\_loader.py}) produces one PyTorch \texttt{.pt} file per patient, containing the patient-specific reaction node features and shared metabolite features in the HeteroData format expected by the training script. For the TCGA-CRC cohort, this yields 690 patient tensors plus the shared graph structure file.
 
 \subsection{Module 4: Model Architecture and Training}
 
@@ -253,7 +255,7 @@ For each reaction with a GPR association, we identified the encoding genes and d
 
 \subsection{Enriched Reaction Node Features}
 
-The original patient features assigned a single zero-valued scalar to each reaction node, providing no per-patient discriminative signal. To address this, we engineered three GPR-derived features per reaction per patient: (i) mean expression across GPR-mapped genes, (ii) maximum expression across GPR-mapped genes, and (iii) fraction of GPR genes exceeding the cohort median. These features were z-score normalised per patient. Metabolite node features (11-dimensional physico-chemical descriptors) were retained unchanged. The enriched reaction features increased the effective input dimensionality from 1 to 3 per reaction node, enabling the GATv2 layers to learn patient-specific patterns.
+The original patient features (v1) assigned a scalar GPR-mapped expression value to each reaction node: the AND = min, OR = max aggregation of its encoding genes' TPM values. While this provides a patient-specific signal, it compresses all GPR-associated gene information into a single number. To provide richer discriminative signal, we engineered three GPR-derived features per reaction per patient (v2): (i) mean expression across GPR-mapped genes, (ii) maximum expression across GPR-mapped genes, and (iii) fraction of GPR genes exceeding the cohort median. These features were z-score normalised per patient. Metabolite node features (519-dimensional: 7 physico-chemical properties plus 512-bit Morgan fingerprints) were retained unchanged. The enriched reaction features increased the effective input dimensionality from 1 to 3 per reaction node, enabling the GATv2 layers to learn patient-specific patterns.
 
 \subsection{Training Dynamics}
 
@@ -305,9 +307,9 @@ MetaGNN (Ours) & 0.814 & \textbf{0.874} & \textbf{0.919} & 0.752 \\
 \label{fig:benchmarks}
 \end{figure}
 
-\subsection{Subsystem-Level Biological Validation}
+\subsection{Subsystem-Level Biological Plausibility}
 
-To assess whether the predicted labels capture known metabolic biology, we mapped Recon3D reactions to metabolic subsystems using BiGG identifier cross-referencing with the Human Metabolic Atlas (Human-GEM). Of 10,600 Recon3D reactions, 6,639 (62.6\%) were successfully mapped to 88 metabolic subsystems.
+To assess whether the predicted labels capture known metabolic biology (as a face-validity check, not a formal biological validation), we mapped Recon3D reactions to metabolic subsystems using BiGG identifier cross-referencing with the Human Metabolic Atlas (Human-GEM). Of 10,600 Recon3D reactions, 6,639 (62.6\%) were successfully mapped to 88 metabolic subsystems.
 
 The most active subsystems in the CRC cohort included exchange/demand reactions (mean activity 1.00, consistent with maintained import/export capacity in tumour tissue), peptide metabolism (1.00), drug metabolism (0.90), inositol phosphate metabolism (0.89), and keratan sulfate biosynthesis (0.89). The least active subsystems included blood group biosynthesis (0.46), vitamin B6 metabolism (0.50), cholesterol biosynthesis via the Bloch pathway (0.53), and folate metabolism (0.54). The reduced activity of cholesterol biosynthesis and folate metabolism in CRC tissue is consistent with reported metabolic reprogramming in colorectal tumours, where these pathways are known to be downregulated relative to normal colonic epithelium. The high activity of drug metabolism pathways is consistent with the known upregulation of xenobiotic processing in CRC.
 
@@ -319,7 +321,7 @@ As an orthogonal validation, we evaluated whether reaction activity scores corre
 
 The AUROC for predicting gene essentiality from reaction activity scores was 0.35, below the random baseline of 0.50. This result is not unexpected: reaction activity (whether an enzyme is expressed) and gene essentiality (whether a cell dies when the gene is knocked out) measure fundamentally different biological properties. An essential gene may encode an enzyme in a constitutively active housekeeping pathway, whilst a non-essential gene may encode an enzyme in a pathway that is actively expressed but functionally redundant. The Spearman correlation between reaction scores and gene effect was 0.074 ($p = 1.4 \times 10^{-17}$), indicating a statistically significant but weak positive relationship. This weak correlation is consistent with the known complexity of the relationship between gene expression and essentiality, which is mediated by pathway redundancy, genetic buffering, and context-dependent synthetic lethality.
 
-\textbf{Downstream utility.} The primary intended use of MetaGNN's reaction activity scores is not essentiality prediction but \textit{context-specific GEM reconstruction}: converting the reference Recon3D model into a patient-specific subnetwork that can be subjected to FBA for flux prediction, metabolic vulnerability identification, and drug target prioritisation. In this workflow, the activity scores serve as input constraints (analogous to the initial scores produced by iMAT or tINIT), and their value is assessed by whether the resulting FBA model produces biologically plausible flux distributions---not by whether they correlate with a separate biological readout such as essentiality. The subsystem-level validation (Section 3.5) provides stronger evidence of downstream utility: the recovery of known CRC metabolic signatures (reduced folate and cholesterol biosynthesis, elevated drug metabolism) without any subsystem-level supervision demonstrates that the predicted activity patterns capture biologically meaningful metabolic reprogramming.
+\textbf{Downstream utility.} The primary intended use of MetaGNN's reaction activity scores is not essentiality prediction but \textit{context-specific GEM reconstruction}: converting the reference Recon3D model into a patient-specific subnetwork that can be subjected to FBA for flux prediction, metabolic vulnerability identification, and drug target prioritisation. In this workflow, the activity scores serve as input constraints (analogous to the initial scores produced by iMAT or tINIT), and their value is assessed by whether the resulting FBA model produces biologically plausible flux distributions---not by whether they correlate with a separate biological readout such as essentiality. The subsystem-level plausibility analysis (Section 3.5) provides supporting evidence of downstream utility: the recovery of known CRC metabolic signatures (reduced folate and cholesterol biosynthesis, elevated drug metabolism) without any subsystem-level supervision demonstrates that the predicted activity patterns capture biologically meaningful metabolic reprogramming.
 
 \subsection{Qualitative Features of the Framework}
 
@@ -327,7 +329,7 @@ Table~\ref{tab:features} compares the architectural features of MetaGNN against 
 
 \begin{table}[htbp]
 \centering
-\caption{Architectural feature comparison of MetaGNN against established context-specific GEM reconstruction methods. MetaGNN is the only method providing topology-aware scoring, heterogeneous graph encoding, and calibrated uncertainty estimates.}
+\caption{Architectural feature comparison of MetaGNN against established context-specific reconstruction methods. MetaGNN is the only method providing topology-aware reaction scoring, heterogeneous graph encoding, and calibrated uncertainty estimates. Note that MetaGNN currently produces reaction activity scores, not complete FBA-validated reconstructions; the comparison therefore reflects the initial scoring step common to all methods.}
 \label{tab:features}
 \renewcommand{\arraystretch}{1.3}
 \small
@@ -373,7 +375,7 @@ For colorectal cancer specifically, Cheng et al.\ (2023) \cite{Cheng2023} recons
 
 \begin{table}[htbp]
 \centering
-\caption{Landscape of GNN applications to metabolic networks. To our knowledge, MetaGNN is the first method combining heterogeneous graph encoding, multi-omics integration, and patient-specific reconstruction on the full human reference network.}
+\caption{Landscape of GNN applications to metabolic networks. MetaGNN is, to our knowledge, the first method combining heterogeneous graph encoding, multi-omics integration, and patient-specific reaction activity scoring on the full human reference network.}
 \label{tab:gnnlandscape}
 \small
 \renewcommand{\arraystretch}{1.2}
@@ -387,13 +389,15 @@ CHESHIRE & Gap-filling (microbial GEMs) & -- & -- & -- & \checkmark \\
 CLOSEgaps & Gap-filling (microbial GEMs) & -- & -- & -- & \checkmark \\
 Multi-HGNN & Gap-filling (hypergraph) & -- & -- & -- & \checkmark \\
 dGbyG & Gibbs energy prediction & -- & -- & -- & \checkmark \\
+DeepMeta & Cancer classification (metabolic) & -- & -- & \checkmark & \checkmark \\
+TROPPO & Context-sp.\ reconstruction (wrapper) & -- & -- & \checkmark & \checkmark \\
 HeteroGATomics & Cancer diagnosis & \checkmark & \checkmark & \checkmark & -- \\
-\textbf{MetaGNN} & \textbf{Patient-sp.\ GEM reconstruction} & \checkmark & \checkmark & \checkmark & \checkmark \\
+\textbf{MetaGNN} & \textbf{Patient-sp.\ reaction scoring} & \checkmark & \checkmark & \checkmark & \checkmark \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-MetaGNN thus occupies a unique and, to our knowledge, previously unfilled niche: it is the first method to apply heterogeneous graph attention with multi-omics features for patient-specific reaction activity prediction on the full human reference metabolic network (Recon3D; 10,600 reactions, 5,835 metabolites, 40,425 stoichiometric edges).
+MetaGNN thus occupies a distinct niche: to our knowledge, it is the first method to apply heterogeneous graph attention with multi-omics features for patient-specific reaction activity scoring on a full human reference genome-scale metabolic network (Recon3D; 10,600 reactions, 5,835 metabolites, 40,425 stoichiometric edges). We note that this is a claim about the specific combination of heterogeneous GNN architecture, multi-omics input, and full-GEM scale; adjacent work using GNNs for metabolic tasks (scFEA, FlowGAT, CHESHIRE, DeepMeta) and context-specific reconstruction ecosystems (TROPPO) exists but addresses different tasks or uses different methodological approaches.
 
 \subsection{Methodological Comparison with Established Reconstruction Approaches}
 
@@ -403,7 +407,7 @@ This independence assumption is the precise gap MetaGNN addresses. By propagatin
 
 The practical consequence is visible in the AUROC comparison: the GPR Threshold baseline (which scores reactions independently, analogously to existing methods) achieves an AUROC of 0.468---below random---whilst MetaGNN achieves 0.874, a difference of 0.406. This is not a marginal improvement: it represents a shift from a model with no discriminative power to one with strong discriminative ability, achieved specifically by incorporating network topology through message passing.
 
-However, a direct numerical performance comparison against GIMME or iMAT on the same dataset is not currently possible because these methods produce binary reaction inclusion/exclusion decisions coupled with flux distributions (requiring an LP solver and biomass objective), whereas MetaGNN currently produces continuous activity scores without a downstream FBA step. A meaningful comparison would require (a) implementing the FBA integration step and (b) defining a shared evaluation protocol that accounts for the different output formats. We consider this the most important direction for a follow-up biological validation study and provide a validation script (\texttt{validate\_fba.py}) alongside this article to facilitate this.
+However, a direct numerical performance comparison against GIMME or iMAT on the same dataset is not currently possible because these methods produce binary reaction inclusion/exclusion decisions coupled with flux distributions (requiring an LP solver and biomass objective), whereas MetaGNN currently produces continuous activity scores without a downstream FBA step. A meaningful comparison would require (a) implementing the FBA integration step and (b) defining a shared evaluation protocol that accounts for the different output formats. We consider this the most important direction for a follow-up validation study and provide a validation script (\texttt{validate\_fba.py}) alongside this article to facilitate this.
 
 \subsection{Limitations and Honest Assessment}
 
@@ -421,7 +425,7 @@ Fifth, the current study does not include a formal ablation study. Three ablatio
 
 Sixth, our demonstration uses RNA-seq data for all 690 patients but matched proteomics for only 95 (13.8\%; Vasaikar et al., 2019). Patients without proteomics receive zero-valued proteomic features, which conflates ``no measurement'' with ``zero abundance'' and may introduce systematic bias. More principled alternatives include: (a) a learned modality-masking token that signals missing data to the attention mechanism, allowing the model to rely exclusively on transcriptomic evidence when proteomics is unavailable; or (b) cross-modal imputation, where a pre-trained encoder predicts protein abundance from transcriptomic profiles before feeding both modalities into the GNN. We plan to implement and benchmark both strategies in a future release.
 
-Seventh, we have not yet performed the downstream FBA step that would convert reaction activity scores into patient-specific flux distributions and COBRA-compatible GEM files. This is arguably the most important missing validation: a reconstruction that cannot sustain non-zero biomass flux under FBA is of limited utility to the COBRA community. A validation script (\texttt{validate\_fba.py}) is provided to test stoichiometric viability (whether predicted active/inactive reaction sets produce metabolically feasible models with non-zero biomass flux). We defer the full biological validation---including comparison with GIMME and iMAT on matched data, and assessment of flux prediction accuracy---to a dedicated follow-up study.
+Seventh, we have not yet performed the downstream FBA step that would convert reaction activity scores into patient-specific flux distributions and COBRA-compatible GEM files. This is arguably the most important missing validation: a reconstruction that cannot sustain non-zero biomass flux under FBA is of limited utility to the COBRA community. A validation script (\texttt{validate\_fba.py}) is provided to test stoichiometric viability (whether predicted active/inactive reaction sets produce metabolically feasible models with non-zero biomass flux). We defer the full downstream validation---including comparison with GIMME and iMAT on matched data, and assessment of flux prediction accuracy---to a dedicated follow-up study.
 
 Eighth, all results are derived from the TCGA-CRC cohort, and out-of-distribution generalisability has not been tested. Applying the trained model (or retraining with the same framework) on an independent CRC cohort---for example, datasets from the Gene Expression Omnibus (GEO) or a local clinical cohort---would provide critical evidence of external validity. Transfer learning experiments to other cancer types (e.g., TCGA-BRCA, TCGA-LUAD) would further establish the generalisability of the topology-aware approach.
 
@@ -452,12 +456,12 @@ conda activate metagnn
 # Full pipeline
 bash run.sh
 
-# Individual steps
-python src/download_data.py --data-dir data/raw
-python src/preprocess_data.py
-python src/train_metagnn.py --device auto
-python src/evaluate.py
-python src/generate_figures.py
+# Individual steps (numbered for execution order)
+python code/01_metagnn_model.py             # Sanity check
+python code/02_data_loader.py               # Verify data loading
+python code/03_train_metagnn.py --data_root data/
+python code/04_evaluate_metagnn.py
+python code/05_generate_figures.py
 \end{verbatim}
 
 \subsection{Hardware Requirements}
@@ -466,7 +470,7 @@ The complete pipeline (label generation, training, evaluation, and figure genera
 
 \subsection{Data Availability}
 
-All pre-processed tensors and the trained model checkpoint are deposited in the companion data repository (\url{https://github.com/thiptanawat/MetaGNN-CRC}). Raw TCGA sequencing data are available via the GDC Data Portal under dbGaP accession phs000178. CPTAC proteomics data are available at the PDC Data Portal (\url{https://pdc.cancer.gov}).
+All pre-processed tensors and the trained model checkpoint are deposited in the companion data repository (\url{https://github.com/thiptanawat/MetaGNN-CRC}). Frozen, versioned archives of both repositories with persistent DOIs will be deposited on Zenodo prior to publication. Raw TCGA sequencing data are available via the GDC Data Portal under dbGaP accession phs000178. CPTAC proteomics data are available at the PDC Data Portal (\url{https://pdc.cancer.gov}).
 
 \section*{Declarations}
 
@@ -553,6 +557,10 @@ This work was supported by the Thailand Science Research and Innovation Fund (TS
 \bibitem{Luecken2025} Kedzierska, K.Z., Crawford, L., et al. (2025). Assessing the limits of zero-shot foundation models in single-cell biology. \textit{Genome Biology}, 26, 54. \url{https://doi.org/10.1186/s13059-025-03574-x}
 
 \bibitem{Wei2025} Wei, J., et al. (2025). From AI for Science to Agentic Science: a survey on autonomous scientific discovery. \textit{arXiv preprint}, arXiv:2508.14111.
+
+\bibitem{Rana2020} Rana, P., Berry, C., Ghosh, P. \& Fong, S.S. (2020). Recent advances on constraint-based models by integrating machine learning. \textit{Current Opinion in Biotechnology}, 64, 85--91. \url{https://doi.org/10.1016/j.copbio.2019.11.007}
+
+\bibitem{Ferreira2024} Ferreira, J., Rocha, M. \& Dias, O. (2024). TROPPO---a Python framework for the reconstruction of context-specific metabolic models. \textit{Bioinformatics}, 40(4), btae150. \url{https://doi.org/10.1093/bioinformatics/btae150}
 
 \end{thebibliography}
 
