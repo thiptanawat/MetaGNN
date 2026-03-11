@@ -1,31 +1,28 @@
-# MetaGNN - MethodsX Repository
+# MetaGNN
 
-**Manuscript:** "MetaGNN: An Open-Source Heterogeneous Graph Attention Network Framework for
-Topology-Aware Metabolic Network Reconstruction"
+**Manuscript:** "MetaGNN: An Open-Source Heterogeneous Graph Attention Network Framework for Topology-Aware Reaction Activity Scoring Toward Metabolic Network Reconstruction"
 
 **Journal:** MethodsX (Elsevier)
-**Author:** Thiptanawat Phongwattana
-**Corresponding Author:** Jonathan H. Chan (jonathan@sit.kmutt.ac.th)
-**Affiliation:** School of Information Technology, King Mongkut's University of
-Technology Thonburi (KMUTT), 126 Pracha Uthit Rd., Bang Mod, Thung Khru, Bangkok 10140, Thailand
+**Authors:** Thiptanawat Phongwattana, Jonathan H. Chan*
+**Affiliation:** School of Information Technology, King Mongkut's University of Technology Thonburi (KMUTT), 126 Pracha Uthit Rd., Bang Mod, Thung Khru, Bangkok 10140, Thailand
+*Corresponding author: jonathan@sit.kmutt.ac.th
 
 **Code Archive (Zenodo):** [https://doi.org/10.5281/zenodo.18903515](https://doi.org/10.5281/zenodo.18903515)
 **Data Archive (Zenodo):** [https://doi.org/10.5281/zenodo.18903519](https://doi.org/10.5281/zenodo.18903519)
+**Companion Dataset Paper:** [MetaGNN-CRC (Data in Brief)](https://github.com/thiptanawat/MetaGNN-CRC)
 
 ---
 
 ## Repository Structure
 
 ```
-MethodsX_Repository/
+MetaGNN/
 ├── README.md                              # This file
-├── MetaGNN_MethodsX.tex                   # LaTeX manuscript source
-├── MetaGNN_MethodsX.pdf                   # Compiled manuscript
-├── fig1_architecture.png                  # Figure 1: Pipeline overview
-├── fig2_training_curves.png               # Figure 2: Training dynamics
+├── fig1_architecture.png                  # Figure 1: Architecture overview
+├── fig2_graph_encoding.png                # Figure 2: Heterogeneous graph encoding
 ├── fig2_benchmarks.png                    # Figure 3: Benchmark comparison
 ├── raw_data/                              # CSV data underlying each figure
-├── code/                                  # Full source code
+├── code/
 │   ├── requirements.txt                   # Python dependencies
 │   ├── environment.yml                    # Conda environment specification
 │   ├── run.sh                             # Single-command full pipeline
@@ -47,11 +44,14 @@ MethodsX_Repository/
 
 ```bash
 # 1. Clone/download this repository
+git clone https://github.com/thiptanawat/MetaGNN.git
+cd MetaGNN
+
 # 2. Create environment
 conda env create -f code/environment.yml
 conda activate metagnn
 
-# 3. Run complete pipeline
+# 3. Run complete pipeline (data download through inference)
 bash code/run.sh
 
 # 4. Or run individual steps
@@ -66,62 +66,98 @@ python code/05_generate_figures.py
 
 ## Method Overview
 
-MetaGNN is a heterogeneous Graph Attention Network (GATv2) framework that produces
-patient-specific reaction activity *state* scores for genome-scale metabolic model
-reconstruction from clinical multi-omics data. The method operates on the Recon3D v3
-human metabolic network and predicts per-reaction binary activity labels by integrating
-transcriptomic and proteomic features through topology-aware message passing.
+MetaGNN is an open-source framework that reformulates reaction activity scoring as node classification on a heterogeneous bipartite graph encoding of the Recon3D v3 human metabolic network. Patient-specific transcriptomic features are propagated through GATv2 attention layers with type-specific message passing, producing per-reaction activity scores with calibrated uncertainty via Monte Carlo Dropout (T=30 passes).
 
-### Architecture Configurations
-
-| Configuration | Layers | Heads | Hidden Dim | Parameters | Purpose |
-|--------------|--------|-------|------------|------------|---------|
-| Default      | 3      | 8     | 256        | 143,489    | Full pipeline execution |
-| Reduced-depth| 2      | 4     | 128        | 873,217*   | CPU training, methodology validation |
-
-*The reduced-depth configuration has more parameters due to the wider input projection
-from the 519-dimensional metabolite features (see manuscript Section 2.4.1).
+The framework is transcriptomics-based with a proteomics-ready architecture: the per-patient reaction feature tensors include a dedicated proteomic channel that is zero-filled in the current release and supports future integration of matched protein abundance data.
 
 ### Graph Structure
 
-- **Graph backbone:** Recon3D v3 (10,600 reactions, 5,835 metabolites, 2,248 genes)
-- **Edge structure:** 40,425 stoichiometric edges (20,512 substrate_of + 19,913 produces)
-- **Training loss:** BCE + mass-balance regularisation (λ_mb = 0.2)
-- **Training:** AdamW optimiser (lr = 5×10⁻⁴), early stopping with patience 20
+| Property | Value |
+|----------|-------|
+| Reference model | Recon3D v3 |
+| Reaction nodes | 10,600 |
+| Metabolite nodes | 5,835 |
+| Genes (GPR-mapped) | 2,248 |
+| Stoichiometric edges | 40,425 (20,512 substrate_of + 19,913 produces) |
+| Shared_metabolite edges | 7,517,742 full; ~83,306 at default k=10 sparsification |
+| Currency metabolites | 15 (down-weighted by factor 0.1) |
+| Metabolite node features | 519-dimensional (7 physico-chemical + 512-bit Morgan fingerprints) |
 
-### Pipeline Execution
+### Architecture Configurations
 
-- **Patients:** 690 TCGA-CRC patients (RNA-seq); 95 with matched CPTAC TMT proteomics
-- **Evaluation cohort:** 220 patients (154 train / 33 val / 33 test)
-- **Labels:** Expression-thresholded consensus via GPR OR-logic + cohort majority vote
-  - 7,434 active / 3,166 inactive reactions (70.1% active)
+| Configuration | Layers | Heads | Hidden Dim | Edge Types | Parameters | Use Case |
+|--------------|--------|-------|------------|------------|------------|----------|
+| Default (bipartite) | 3 | 8 | 256 | 2 (substrate_of, produces) | 143,489 | 220-patient benchmark |
+| Expanded (+shared_met) | 3 | 8 | 256 | 3 (+shared_metabolite) | 9.67M | 624-patient full-cohort |
+| Reduced-depth | 2 | 4 | 128 | 2 | 873,217* | Scaling comparison |
 
-### Benchmark Results (220-patient evaluation, n=33 test patients, τ=0.15)
+*The reduced-depth configuration has more parameters in bipartite-only mode because the first-layer input projection from the 519-dimensional metabolite features dominates when the hidden dimension is smaller (128 vs. 256). See manuscript Section 2.4.1.
 
-| Method | F1 Score | AUROC | Precision | Recall |
-|--------|----------|-------|-----------|--------|
-| Random Classifier | 0.584 | 0.500 | 0.701 | 0.500 |
-| Majority Class | 0.824 | 0.500 | 0.701 | 1.000 |
-| GPR Threshold (no GNN) | 0.869 | 0.468 | 0.822 | 0.925 |
-| **MetaGNN (Ours)** | **0.796 ± 0.041** | **0.861 ± 0.030** | **0.665 ± 0.016** | **1.000 ± 0.000** |
+### Training
 
-MetaGNN achieves the highest AUROC (0.861), demonstrating that topology-aware message
-passing learns generalisable reaction activity patterns beyond the label-generating heuristic.
-The GPR Threshold achieves higher F1 by recapitulating the labelling rule, but its AUROC
-(0.468) is below random, indicating no true discriminative power.
+- **Optimiser:** AdamW (lr = 5×10⁻⁴, weight decay = 1×10⁻⁵, cosine annealing)
+- **Loss:** BCE (class-weighted) + mass-balance regularisation (λ_mb = 0.2)
+- **Dropout:** 0.2 within GATv2 layers
+- **Early stopping:** Patience 20 on validation F1
+- **Convergence:** Best model at epoch 141 of 200
+
+---
+
+## Evaluation Results
+
+### Two Evaluation Settings
+
+The framework is validated in two complementary settings that differ in supervision signal, feature version, and class balance. AUROC values between settings are not directly comparable; the performance gap itself is a key finding.
+
+| Parameter | 220-Patient Benchmark | 624-Patient Full-Cohort |
+|-----------|----------------------|------------------------|
+| Cohort | 220 (154/33/33 split) | 624 (5-fold CV) |
+| Labels | Expression-thresholded consensus | HMA 11-tissue union bounds |
+| Class balance | 70.1% active / 29.9% inactive | 76.9% active / 23.1% inactive |
+| Features | v2 enriched (3D: mean, max, frac.) | v1 scalar (2D: RNA + zero-filled prot.) |
+| Edge types | 2 (bipartite only) | 3 (+shared_metabolite, k=10) |
+| Parameters | 143,489 | 9.67M |
+| **AUROC** | **0.861 ± 0.030** | **0.663 ± 0.001** |
+| Purpose | Benchmark discriminative ability | Scalability + biological supervision |
+
+### Benchmark Results (220-patient, expression-thresholded labels)
+
+| Method | AUROC | F1 | Precision | Recall |
+|--------|-------|-----|-----------|--------|
+| **MetaGNN (ours)** | **0.861 ± 0.030** | **0.796 ± 0.041** | **0.838 ± 0.028** | **0.908 ± 0.020** |
+| GPR Threshold (topology-naive) | 0.697 | 0.723 | 0.701 | 0.746 |
+| Majority-class baseline | 0.500 | 0.824 | 0.701 | 1.000 |
+| Random baseline | 0.499 | 0.560 | 0.698 | 0.468 |
+
+**GPR-only evaluation** (5,937 reactions with GPR rules): AUROC = 0.843 ± 0.033, F1 = 0.729 ± 0.048.
+
+### FBA Viability Testing
+
+97% of MetaGNN-reconstructed patient models sustain non-zero biomass flux (COBRApy v0.29.0, GLPK solver), compared to 29% for random baselines.
+
+### Architecture Scaling
+
+Scaling from 873K to 9.67M parameters yields ΔAUROC = +0.115 in the full-cohort setting, demonstrating capacity-dependent learning.
+
+---
+
+## Key Findings
+
+1. **Topology helps:** Graph message passing adds 9.2 F1 points over a disconnected baseline (Table 5 in manuscript).
+2. **Signal is coarse:** The topology benefit is primarily driven by degree centrality of metabolic hubs, not fine-grained stoichiometric logic. This is transparently reported.
+3. **Label quality matters:** The AUROC gap between settings (0.861 vs 0.663) demonstrates that supervision alignment is a major determinant of performance alongside architecture.
+4. **Biologically coherent:** 97% FBA viability confirms metabolically meaningful reconstructions.
+5. **Uncertainty quantification:** Monte Carlo Dropout (T=30) provides per-reaction epistemic uncertainty estimates.
 
 ---
 
 ## Hardware Requirements
 
-The complete pipeline executes in under 3 minutes on an Apple M4 Max (MPS backend).
-CPU-only and CUDA GPU training are also supported.
+The complete pipeline executes on consumer hardware. Tested on Apple M4 Max with MPS acceleration and CPU fallback for unsupported operations (scatter_reduce). CPU-only and CUDA GPU training are also supported.
 
 ---
 
 ## Licence
 
-Code: MIT Licence
-Raw data: CC-BY 4.0
-
----
+- **Code:** MIT Licence
+- **Data:** CC-BY 4.0
