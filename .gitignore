@@ -1,0 +1,42 @@
+# Manuscript files (kept locally, not in code repo)
+*.tex
+*.pdf
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.toc
+*.lof
+*.lot
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs (keep k_sensitivity.log as experiment data)
+# *.log  -- already covered above for LaTeX logs
+
+# IDE
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Results (generated, not source)
+results_gpu/
+
+# Environment
+.env

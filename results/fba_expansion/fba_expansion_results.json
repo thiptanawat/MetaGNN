@@ -1,0 +1,288 @@
+{
+  "n_patients": 33,
+  "n_viable": 32,
+  "viability_rate": 0.9696969696969697,
+  "biomass_range": [
+    329.574551270123,
+    472.52077934852105
+  ],
+  "biomass_mean": 412.86983673804446,
+  "biomass_std": 31.42384958484823,
+  "threshold": 0.15,
+  "prediction_stats": {
+    "mean": 0.4025435149669647,
+    "std": 0.30500128865242004,
+    "active_ratio": 0.7740766152086906
+  },
+  "random_baseline": {
+    "viability_rate": 0.29,
+    "n_trials": 100,
+    "mean_biomass": 105.51698745351823
+  },
+  "per_patient": [
+    {
+      "patient_id": "TCGA-EB-5770-01A",
+      "biomass_flux": 472.52077934852105,
+      "viable": true,
+      "n_inactive": 2402,
+      "n_active": 8198,
+      "fba_time_s": 0.99
+    },
+    {
+      "patient_id": "TCGA-BE-1654-01A",
+      "biomass_flux": 426.72496930899194,
+      "viable": true,
+      "n_inactive": 2391,
+      "n_active": 8209,
+      "fba_time_s": 0.24
+    },
+    {
+      "patient_id": "TCGA-CB-1227-01A",
+      "biomass_flux": 425.49577038588797,
+      "viable": true,
+      "n_inactive": 2399,
+      "n_active": 8201,
+      "fba_time_s": 0.22
+    },
+    {
+      "patient_id": "TCGA-BD-4416-01A",
+      "biomass_flux": 368.7786432579696,
+      "viable": true,
+      "n_inactive": 2396,
+      "n_active": 8204,
+      "fba_time_s": 0.28
+    },
+    {
+      "patient_id": "TCGA-BA-6378-01A",
+      "biomass_flux": 426.3038277354172,
+      "viable": true,
+      "n_inactive": 2383,
+      "n_active": 8217,
+      "fba_time_s": 0.22
+    },
+    {
+      "patient_id": "TCGA-EF-2290-01A",
+      "biomass_flux": 449.31515003432463,
+      "viable": true,
+      "n_inactive": 2408,
+      "n_active": 8192,
+      "fba_time_s": 0.27
+    },
+    {
+      "patient_id": "TCGA-FE-3044-01A",
+      "biomass_flux": 429.0269878139603,
+      "viable": true,
+      "n_inactive": 2407,
+      "n_active": 8193,
+      "fba_time_s": 0.14
+    },
+    {
+      "patient_id": "TCGA-AF-4286-01A",
+      "biomass_flux": 383.5510488946563,
+      "viable": true,
+      "n_inactive": 2406,
+      "n_active": 8194,
+      "fba_time_s": 0.15
+    },
+    {
+      "patient_id": "TCGA-DA-4263-01A",
+      "biomass_flux": 379.6258237049942,
+      "viable": true,
+      "n_inactive": 2376,
+      "n_active": 8224,
+      "fba_time_s": 0.11
+    },
+    {
+      "patient_id": "TCGA-CB-2553-01A",
+      "biomass_flux": 386.0864854962268,
+      "viable": true,
+      "n_inactive": 2401,
+      "n_active": 8199,
+      "fba_time_s": 0.15
+    },
+    {
+      "patient_id": "TCGA-EE-8935-01A",
+      "biomass_flux": 430.2324947719581,
+      "viable": true,
+      "n_inactive": 2406,
+      "n_active": 8194,
+      "fba_time_s": 0.15
+    },
+    {
+      "patient_id": "TCGA-BB-9253-01A",
+      "biomass_flux": 386.0864854962269,
+      "viable": true,
+      "n_inactive": 2392,
+      "n_active": 8208,
+      "fba_time_s": 0.14
+    },
+    {
+      "patient_id": "TCGA-EA-8364-01A",
+      "biomass_flux": 411.76643466085983,
+      "viable": true,
+      "n_inactive": 2394,
+      "n_active": 8206,
+      "fba_time_s": 0.33
+    },
+    {
+      "patient_id": "TCGA-EB-6594-01A",
+      "biomass_flux": 329.574551270123,
+      "viable": true,
+      "n_inactive": 2415,
+      "n_active": 8185,
+      "fba_time_s": 0.24
+    },
+    {
+      "patient_id": "TCGA-AA-4934-01A",
+      "biomass_flux": 386.0864854962267,
+      "viable": true,
+      "n_inactive": 2375,
+      "n_active": 8225,
+      "fba_time_s": 0.21
+    },
+    {
+      "patient_id": "TCGA-AC-8049-01A",
+      "biomass_flux": 418.7749334089546,
+      "viable": true,
+      "n_inactive": 2376,
+      "n_active": 8224,
+      "fba_time_s": 0.26
+    },
+    {
+      "patient_id": "TCGA-AC-8651-01A",
+      "biomass_flux": 0.0,
+      "viable": false,
+      "n_inactive": 2396,
+      "n_active": 8204,
+      "fba_time_s": 0.16
+    },
+    {
+      "patient_id": "TCGA-AD-3749-01A",
+      "biomass_flux": 466.62340830405526,
+      "viable": true,
+      "n_inactive": 2389,
+      "n_active": 8211,
+      "fba_time_s": 0.26
+    },
+    {
+      "patient_id": "TCGA-DD-2012-01A",
+      "biomass_flux": 422.26522635025515,
+      "viable": true,
+      "n_inactive": 2389,
+      "n_active": 8211,
+      "fba_time_s": 0.23
+    },
+    {
+      "patient_id": "TCGA-FF-4102-01A",
+      "biomass_flux": 460.5163028675541,
+      "viable": true,
+      "n_inactive": 2399,
+      "n_active": 8201,
+      "fba_time_s": 0.23
+    },
+    {
+      "patient_id": "TCGA-BA-7539-01A",
+      "biomass_flux": 426.30382773541703,
+      "viable": true,
+      "n_inactive": 2384,
+      "n_active": 8216,
+      "fba_time_s": 0.26
+    },
+    {
+      "patient_id": "TCGA-BD-1263-01A",
+      "biomass_flux": 419.3056482212135,
+      "viable": true,
+      "n_inactive": 2438,
+      "n_active": 8162,
+      "fba_time_s": 0.23
+    },
+    {
+      "patient_id": "TCGA-AD-4301-01A",
+      "biomass_flux": 426.7249693089918,
+      "viable": true,
+      "n_inactive": 2372,
+      "n_active": 8228,
+      "fba_time_s": 0.14
+    },
+    {
+      "patient_id": "TCGA-AE-1438-01A",
+      "biomass_flux": 379.12602182072106,
+      "viable": true,
+      "n_inactive": 2403,
+      "n_active": 8197,
+      "fba_time_s": 0.25
+    },
+    {
+      "patient_id": "TCGA-BA-1398-01A",
+      "biomass_flux": 412.88904353271477,
+      "viable": true,
+      "n_inactive": 2382,
+      "n_active": 8218,
+      "fba_time_s": 0.3
+    },
+    {
+      "patient_id": "TCGA-DE-6457-01A",
+      "biomass_flux": 426.3038277354171,
+      "viable": true,
+      "n_inactive": 2396,
+      "n_active": 8204,
+      "fba_time_s": 0.25
+    },
+    {
+      "patient_id": "TCGA-FA-5164-01A",
+      "biomass_flux": 413.9541891328147,
+      "viable": true,
+      "n_inactive": 2407,
+      "n_active": 8193,
+      "fba_time_s": 0.28
+    },
+    {
+      "patient_id": "TCGA-AB-1820-01A",
+      "biomass_flux": 386.0864854962268,
+      "viable": true,
+      "n_inactive": 2397,
+      "n_active": 8203,
+      "fba_time_s": 0.17
+    },
+    {
+      "patient_id": "TCGA-EF-5089-01A",
+      "biomass_flux": 422.79536468222165,
+      "viable": true,
+      "n_inactive": 2398,
+      "n_active": 8202,
+      "fba_time_s": 0.24
+    },
+    {
+      "patient_id": "TCGA-EB-3019-01A",
+      "biomass_flux": 463.5322541476044,
+      "viable": true,
+      "n_inactive": 2375,
+      "n_active": 8225,
+      "fba_time_s": 0.22
+    },
+    {
+      "patient_id": "TCGA-EF-7527-01A",
+      "biomass_flux": 376.6566300229985,
+      "viable": true,
+      "n_inactive": 2406,
+      "n_active": 8194,
+      "fba_time_s": 0.23
+    },
+    {
+      "patient_id": "TCGA-DB-2920-01A",
+      "biomass_flux": 415.89169565039515,
+      "viable": true,
+      "n_inactive": 2379,
+      "n_active": 8221,
+      "fba_time_s": 0.17
+    },
+    {
+      "patient_id": "TCGA-FF-5580-01A",
+      "biomass_flux": 382.9090095235215,
+      "viable": true,
+      "n_inactive": 2391,
+      "n_active": 8209,
+      "fba_time_s": 0.2
+    }
+  ]
+}

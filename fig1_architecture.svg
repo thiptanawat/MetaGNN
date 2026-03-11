@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 340" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7.5" refY="3" orient="auto">
+      <polygon points="0 0.5,7.5 3,0 5.5" fill="#555"/>
+    </marker>
+    <marker id="arr-dash" markerWidth="8" markerHeight="6" refX="7.5" refY="3" orient="auto">
+      <polygon points="0 0.5,7.5 3,0 5.5" fill="#999"/>
+    </marker>
+    <filter id="sh" x="-2%" y="-2%" width="104%" height="104%">
+      <feDropShadow dx="1" dy="1" stdDeviation="1.5" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Column headers -->
+  <text x="75" y="22" text-anchor="middle" font-size="12" font-weight="bold" fill="#444">Data Sources</text>
+  <text x="265" y="22" text-anchor="middle" font-size="12" font-weight="bold" fill="#444">Heterogeneous Graph</text>
+  <text x="500" y="22" text-anchor="middle" font-size="12" font-weight="bold" fill="#444">GATv2 Encoder</text>
+  <text x="710" y="22" text-anchor="middle" font-size="12" font-weight="bold" fill="#444">Prediction</text>
+  <text x="910" y="22" text-anchor="middle" font-size="12" font-weight="bold" fill="#444">Output</text>
+
+  <!-- ═══ DATA SOURCES ═══ -->
+  <rect x="10" y="40" width="130" height="48" rx="6" fill="#B0BEC5" stroke="#78909C" stroke-width="1" filter="url(#sh)"/>
+  <text x="75" y="59" text-anchor="middle" font-size="10" font-weight="bold" fill="#263238">Recon3D v3</text>
+  <text x="75" y="73" text-anchor="middle" font-size="8.5" fill="#37474F">(SBML/XML)</text>
+
+  <rect x="10" y="100" width="130" height="48" rx="6" fill="#B0BEC5" stroke="#78909C" stroke-width="1" filter="url(#sh)"/>
+  <text x="75" y="119" text-anchor="middle" font-size="10" font-weight="bold" fill="#263238">TCGA RNA-seq</text>
+  <text x="75" y="133" text-anchor="middle" font-size="8.5" fill="#37474F">(690 patients)</text>
+
+  <rect x="10" y="160" width="130" height="48" rx="6" fill="#B0BEC5" stroke="#78909C" stroke-width="1" filter="url(#sh)"/>
+  <text x="75" y="175" text-anchor="middle" font-size="10" font-weight="bold" fill="#263238">CPTAC Proteomics</text>
+  <text x="75" y="189" text-anchor="middle" font-size="8.5" fill="#37474F">(zero-filled)*</text>
+
+  <rect x="10" y="220" width="130" height="48" rx="6" fill="#B0BEC5" stroke="#78909C" stroke-width="1" filter="url(#sh)"/>
+  <text x="75" y="239" text-anchor="middle" font-size="10" font-weight="bold" fill="#263238">Human Metabolic</text>
+  <text x="75" y="253" text-anchor="middle" font-size="8.5" fill="#37474F">Atlas (labels)</text>
+
+  <!-- ═══ HETEROGENEOUS GRAPH ═══ -->
+  <rect x="185" y="40" width="160" height="58" rx="7" fill="#5C6BC0" filter="url(#sh)"/>
+  <text x="265" y="60" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#FFF">Reaction Nodes</text>
+  <text x="265" y="75" text-anchor="middle" font-size="9" fill="#E8EAF6">V_R (10,600)</text>
+  <text x="265" y="88" text-anchor="middle" font-size="8.5" fill="#C5CAE9">2-dim features</text>
+
+  <rect x="185" y="115" width="160" height="58" rx="7" fill="#26A69A" filter="url(#sh)"/>
+  <text x="265" y="135" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#FFF">Metabolite Nodes</text>
+  <text x="265" y="150" text-anchor="middle" font-size="9" fill="#E0F2F1">V_M (5,835)</text>
+  <text x="265" y="163" text-anchor="middle" font-size="8.5" fill="#B2DFDB">519-dim features</text>
+
+  <rect x="185" y="192" width="160" height="58" rx="7" fill="#8D6E63" filter="url(#sh)"/>
+  <text x="265" y="212" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#FFF">Bipartite Edges</text>
+  <text x="265" y="227" text-anchor="middle" font-size="9" fill="#EFEBE9">substrate_of (20,512)</text>
+  <text x="265" y="240" text-anchor="middle" font-size="8.5" fill="#D7CCC8">produces (19,913)</text>
+
+  <!-- ═══ GATv2 ENCODER ═══ -->
+  <rect x="405" y="45" width="190" height="72" rx="8" fill="#FF7043" filter="url(#sh)"/>
+  <text x="500" y="67" text-anchor="middle" font-size="11" font-weight="bold" fill="#FFF">GATv2 Layers</text>
+  <text x="500" y="82" text-anchor="middle" font-size="9" fill="#FBE9E7">(3 layers, 8 heads)</text>
+  <text x="500" y="95" text-anchor="middle" font-size="8.5" fill="#FFCCBC">HeteroConv + Attention</text>
+  <text x="500" y="107" text-anchor="middle" font-size="8.5" fill="#FFCCBC">+ LayerNorm</text>
+
+  <rect x="405" y="135" width="190" height="55" rx="8" fill="#FF7043" filter="url(#sh)"/>
+  <text x="500" y="155" text-anchor="middle" font-size="10" font-weight="bold" fill="#FFF">Message Passing</text>
+  <text x="500" y="170" text-anchor="middle" font-size="9" fill="#FBE9E7">substrate_of ↔ produces</text>
+  <text x="500" y="183" text-anchor="middle" font-size="8.5" fill="#FFCCBC">Currency mets: 0.1× weight</text>
+
+  <!-- ═══ PREDICTION ═══ -->
+  <rect x="640" y="45" width="140" height="65" rx="7" fill="#AB47BC" filter="url(#sh)"/>
+  <text x="710" y="66" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#FFF">MLP Head</text>
+  <text x="710" y="80" text-anchor="middle" font-size="9" fill="#F3E5F5">Linear → ReLU</text>
+  <text x="710" y="93" text-anchor="middle" font-size="9" fill="#E1BEE7">→ Dropout → Linear → σ</text>
+
+  <rect x="640" y="125" width="140" height="55" rx="7" fill="#7E57C2" filter="url(#sh)"/>
+  <text x="710" y="146" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#FFF">MC Dropout</text>
+  <text x="710" y="160" text-anchor="middle" font-size="9" fill="#EDE7F6">(T = 30 passes)</text>
+  <text x="710" y="173" text-anchor="middle" font-size="8.5" fill="#D1C4E9">σ_r uncertainty</text>
+
+  <!-- ═══ OUTPUT ═══ -->
+  <rect x="835" y="45" width="150" height="55" rx="7" fill="#66BB6A" filter="url(#sh)"/>
+  <text x="910" y="65" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#FFF">s ∈ (0, 1)</text>
+  <text x="910" y="80" text-anchor="middle" font-size="9" fill="#E8F5E9">Activity Scores</text>
+  <text x="910" y="92" text-anchor="middle" font-size="8.5" fill="#C8E6C9">per reaction × patient</text>
+
+  <rect x="835" y="115" width="150" height="55" rx="7" fill="#EF5350" filter="url(#sh)"/>
+  <text x="910" y="135" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#FFF">Loss</text>
+  <text x="910" y="150" text-anchor="middle" font-size="9" fill="#FFEBEE">BCE + λ·MB</text>
+  <text x="910" y="162" text-anchor="middle" font-size="8.5" fill="#FFCDD2">regularisation</text>
+
+  <!-- ═══ ARROWS (curved paths, ending at box borders) ═══ -->
+
+  <!-- Sources → Graph -->
+  <!-- Recon3D → Reaction Nodes -->
+  <path d="M 140,64 C 158,64 170,64 185,64" fill="none" stroke="#555" stroke-width="1.3" marker-end="url(#arr)"/>
+  <!-- TCGA → Reaction Nodes (curve up) -->
+  <path d="M 140,118 C 158,110 168,94 185,82" fill="none" stroke="#555" stroke-width="1.3" marker-end="url(#arr)"/>
+  <!-- CPTAC → Reaction Nodes (dashed, curve up) -->
+  <path d="M 140,178 C 160,168 170,120 185,84" fill="none" stroke="#999" stroke-width="1.1" stroke-dasharray="4,3" marker-end="url(#arr-dash)"/>
+  <!-- TCGA → Metabolite Nodes (curve down) -->
+  <path d="M 140,130 C 158,134 170,138 185,140" fill="none" stroke="#555" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr-dash)"/>
+  <!-- HMA → Edges (not connected to graph encoding, goes to labels in training) -->
+
+  <!-- Graph → GATv2 -->
+  <!-- Reaction Nodes → GATv2 Layers -->
+  <path d="M 345,68 C 368,68 385,72 405,76" fill="none" stroke="#555" stroke-width="1.3" marker-end="url(#arr)"/>
+  <!-- Metabolite Nodes → GATv2 Layers (curve up) -->
+  <path d="M 345,138 C 370,128 388,110 405,100" fill="none" stroke="#555" stroke-width="1.3" marker-end="url(#arr)"/>
+  <!-- Bipartite Edges → Message Passing -->
+  <path d="M 345,218 C 370,210 388,180 405,162" fill="none" stroke="#555" stroke-width="1.3" marker-end="url(#arr)"/>
+
+  <!-- GATv2 → Prediction -->
+  <!-- GATv2 Layers → MLP Head -->
+  <path d="M 595,80 C 612,78 625,74 640,72" fill="none" stroke="#555" stroke-width="1.3" marker-end="url(#arr)"/>
+  <!-- Message Passing → MC Dropout -->
+  <path d="M 595,160 C 612,156 625,152 640,148" fill="none" stroke="#555" stroke-width="1.3" marker-end="url(#arr)"/>
+
+  <!-- Prediction → Output -->
+  <!-- MLP Head → Activity Scores -->
+  <path d="M 780,72 C 800,72 815,72 835,72" fill="none" stroke="#555" stroke-width="1.3" marker-end="url(#arr)"/>
+  <!-- MC Dropout → Loss -->
+  <path d="M 780,150 C 800,148 815,144 835,142" fill="none" stroke="#555" stroke-width="1.3" marker-end="url(#arr)"/>
+
+  <!-- ═══ FOOTNOTE ═══ -->
+  <text x="525" y="305" text-anchor="middle" font-size="8.5" fill="#999" font-style="italic">*Proteomic channel zero-filled for all 690 patients in this release; architecture supports future integration (see Section 4.3).</text>
+  <text x="525" y="320" text-anchor="middle" font-size="8.5" fill="#999" font-style="italic">Dashed arrows indicate data flows when matched proteomics become available.</text>
+</svg>

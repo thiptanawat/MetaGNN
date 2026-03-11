@@ -1,0 +1,189 @@
+2026-03-08 03:59:37  INFO      Using device: cpu
+2026-03-08 03:59:37  INFO      Config: hidden_dim=128, n_layers=2, heads=4, batch_size=4, n_epochs=80, patience=15
+2026-03-08 03:59:37  INFO      Split: 154 train, 33 val, 33 test
+2026-03-08 03:59:37  INFO      
+############################################################
+2026-03-08 03:59:37  INFO      # PART 1: PROTEOMICS ABLATION EXPERIMENT
+2026-03-08 03:59:37  INFO      ############################################################
+2026-03-08 03:59:37  INFO      
+============================================================
+2026-03-08 03:59:37  INFO      Running condition: Baseline (RNA+Proteomics) (seed=2024)
+2026-03-08 03:59:37  INFO      ============================================================
+2026-03-08 03:59:37  INFO        Model parameters: 873,217
+2026-03-08 04:00:35  INFO        Epoch   1  train_loss=1.4536  val_F1=0.8235  val_AUROC=0.5520
+2026-03-08 04:09:39  INFO        Epoch  10  train_loss=1.1627  val_F1=0.8587  val_AUROC=0.8066
+2026-03-08 04:19:37  INFO        Epoch  20  train_loss=1.0207  val_F1=0.8965  val_AUROC=0.8714
+2026-03-08 04:29:38  INFO        Epoch  30  train_loss=0.9632  val_F1=0.9123  val_AUROC=0.8926
+2026-03-08 04:39:36  INFO        Epoch  40  train_loss=0.9292  val_F1=0.9161  val_AUROC=0.9014
+2026-03-08 04:49:36  INFO        Epoch  50  train_loss=0.9074  val_F1=0.9233  val_AUROC=0.9050
+2026-03-08 04:59:36  INFO        Epoch  60  train_loss=0.8936  val_F1=0.9262  val_AUROC=0.9071
+2026-03-08 05:09:35  INFO        Epoch  70  train_loss=0.8877  val_F1=0.9276  val_AUROC=0.9081
+2026-03-08 05:19:35  INFO        Epoch  80  train_loss=0.8866  val_F1=0.9278  val_AUROC=0.9081
+2026-03-08 05:19:35  INFO        Training time: 4798.7s, best val F1: 0.9279
+2026-03-08 05:19:41  INFO        Test F1:    0.9279 ± 0.0010
+2026-03-08 05:19:41  INFO        Test AUROC: 0.9081 ± 0.0008
+2026-03-08 05:19:41  INFO        Test AUPRC: 0.9494 ± 0.0005
+2026-03-08 05:19:41  INFO      
+============================================================
+2026-03-08 05:19:41  INFO      Running condition: RNA-only (proteomics zeroed) (seed=2024)
+2026-03-08 05:19:41  INFO      ============================================================
+2026-03-08 05:19:41  INFO        Model parameters: 873,217
+2026-03-08 05:20:41  INFO        Epoch   1  train_loss=1.4407  val_F1=0.8248  val_AUROC=0.5930
+2026-03-08 05:29:42  INFO        Epoch  10  train_loss=1.1868  val_F1=0.8522  val_AUROC=0.7948
+2026-03-08 05:39:42  INFO        Epoch  20  train_loss=1.0399  val_F1=0.8879  val_AUROC=0.8658
+2026-03-08 05:49:43  INFO        Epoch  30  train_loss=0.9784  val_F1=0.9062  val_AUROC=0.8908
+2026-03-08 05:59:43  INFO        Epoch  40  train_loss=0.9405  val_F1=0.9188  val_AUROC=0.9020
+2026-03-08 06:09:44  INFO        Epoch  50  train_loss=0.9179  val_F1=0.9237  val_AUROC=0.9057
+2026-03-08 06:19:45  INFO        Epoch  60  train_loss=0.9038  val_F1=0.9272  val_AUROC=0.9079
+2026-03-08 06:29:46  INFO        Epoch  70  train_loss=0.8979  val_F1=0.9277  val_AUROC=0.9080
+2026-03-08 06:39:47  INFO        Epoch  80  train_loss=0.8967  val_F1=0.9281  val_AUROC=0.9081
+2026-03-08 06:39:47  INFO        Training time: 4806.1s, best val F1: 0.9281
+2026-03-08 06:39:53  INFO        Test F1:    0.9281 ± 0.0008
+2026-03-08 06:39:53  INFO        Test AUROC: 0.9083 ± 0.0008
+2026-03-08 06:39:53  INFO        Test AUPRC: 0.9492 ± 0.0005
+2026-03-08 06:39:53  INFO      
+============================================================
+2026-03-08 06:39:53  INFO      Running condition: Baseline (RNA+Proteomics) (seed=42)
+2026-03-08 06:39:53  INFO      ============================================================
+2026-03-08 06:39:53  INFO        Model parameters: 873,217
+2026-03-08 06:40:53  INFO        Epoch   1  train_loss=1.4117  val_F1=0.8239  val_AUROC=0.5516
+2026-03-08 06:49:51  INFO        Epoch  10  train_loss=1.1459  val_F1=0.8661  val_AUROC=0.8224
+2026-03-08 06:59:47  INFO        Epoch  20  train_loss=1.0112  val_F1=0.8982  val_AUROC=0.8816
+2026-03-08 07:09:45  INFO        Epoch  30  train_loss=0.9572  val_F1=0.9155  val_AUROC=0.8958
+2026-03-08 07:19:42  INFO        Epoch  40  train_loss=0.9234  val_F1=0.9220  val_AUROC=0.9032
+2026-03-08 07:29:40  INFO        Epoch  50  train_loss=0.9036  val_F1=0.9271  val_AUROC=0.9051
+2026-03-08 07:39:39  INFO        Epoch  60  train_loss=0.8907  val_F1=0.9290  val_AUROC=0.9061
+2026-03-08 07:49:36  INFO        Epoch  70  train_loss=0.8853  val_F1=0.9305  val_AUROC=0.9062
+2026-03-08 07:59:36  INFO        Epoch  80  train_loss=0.8843  val_F1=0.9304  val_AUROC=0.9064
+2026-03-08 07:59:36  INFO        Training time: 4783.8s, best val F1: 0.9308
+2026-03-08 07:59:42  INFO        Test F1:    0.9304 ± 0.0010
+2026-03-08 07:59:42  INFO        Test AUROC: 0.9063 ± 0.0008
+2026-03-08 07:59:42  INFO        Test AUPRC: 0.9486 ± 0.0006
+2026-03-08 07:59:42  INFO      
+============================================================
+2026-03-08 07:59:42  INFO      Running condition: RNA-only (proteomics zeroed) (seed=42)
+2026-03-08 07:59:42  INFO      ============================================================
+2026-03-08 07:59:42  INFO        Model parameters: 873,217
+2026-03-08 08:00:41  INFO        Epoch   1  train_loss=1.3994  val_F1=0.8264  val_AUROC=0.6448
+2026-03-08 08:09:39  INFO        Epoch  10  train_loss=1.1490  val_F1=0.8596  val_AUROC=0.8061
+2026-03-08 08:19:36  INFO        Epoch  20  train_loss=1.0262  val_F1=0.8888  val_AUROC=0.8642
+2026-03-08 08:29:33  INFO        Epoch  30  train_loss=0.9678  val_F1=0.9055  val_AUROC=0.8880
+2026-03-08 08:39:39  INFO        Epoch  40  train_loss=0.9351  val_F1=0.9164  val_AUROC=0.8966
+2026-03-08 08:49:48  INFO        Epoch  50  train_loss=0.9139  val_F1=0.9224  val_AUROC=0.9015
+2026-03-08 08:59:57  INFO        Epoch  60  train_loss=0.9003  val_F1=0.9251  val_AUROC=0.9042
+2026-03-08 09:10:11  INFO        Epoch  70  train_loss=0.8945  val_F1=0.9261  val_AUROC=0.9044
+2026-03-08 09:20:28  INFO        Epoch  80  train_loss=0.8934  val_F1=0.9262  val_AUROC=0.9046
+2026-03-08 09:20:28  INFO        Training time: 4845.6s, best val F1: 0.9265
+2026-03-08 09:20:33  INFO        Test F1:    0.9266 ± 0.0009
+2026-03-08 09:20:33  INFO        Test AUROC: 0.9046 ± 0.0009
+2026-03-08 09:20:33  INFO        Test AUPRC: 0.9475 ± 0.0005
+2026-03-08 09:20:33  INFO      
+============================================================
+2026-03-08 09:20:33  INFO      Running condition: Baseline (RNA+Proteomics) (seed=123)
+2026-03-08 09:20:33  INFO      ============================================================
+2026-03-08 09:20:33  INFO        Model parameters: 873,217
+2026-03-08 09:21:35  INFO        Epoch   1  train_loss=1.4249  val_F1=0.8239  val_AUROC=0.5356
+2026-03-08 09:30:50  INFO        Epoch  10  train_loss=1.1594  val_F1=0.8618  val_AUROC=0.8114
+2026-03-08 09:41:07  INFO        Epoch  20  train_loss=1.0256  val_F1=0.8934  val_AUROC=0.8742
+2026-03-08 09:51:24  INFO        Epoch  30  train_loss=0.9612  val_F1=0.9128  val_AUROC=0.8943
+2026-03-08 10:01:41  INFO        Epoch  40  train_loss=0.9284  val_F1=0.9206  val_AUROC=0.9019
+2026-03-08 10:11:58  INFO        Epoch  50  train_loss=0.9065  val_F1=0.9261  val_AUROC=0.9061
+2026-03-08 10:22:19  INFO        Epoch  60  train_loss=0.8941  val_F1=0.9284  val_AUROC=0.9078
+2026-03-08 10:32:37  INFO        Epoch  70  train_loss=0.8880  val_F1=0.9290  val_AUROC=0.9082
+2026-03-08 10:42:53  INFO        Epoch  80  train_loss=0.8872  val_F1=0.9294  val_AUROC=0.9084
+2026-03-08 10:42:53  INFO        Training time: 4939.6s, best val F1: 0.9296
+2026-03-08 10:42:58  INFO        Test F1:    0.9297 ± 0.0007
+2026-03-08 10:42:58  INFO        Test AUROC: 0.9084 ± 0.0008
+2026-03-08 10:42:58  INFO        Test AUPRC: 0.9496 ± 0.0005
+2026-03-08 10:42:58  INFO      
+============================================================
+2026-03-08 10:42:58  INFO      Running condition: RNA-only (proteomics zeroed) (seed=123)
+2026-03-08 10:42:58  INFO      ============================================================
+2026-03-08 10:42:59  INFO        Model parameters: 873,217
+2026-03-08 10:44:00  INFO        Epoch   1  train_loss=1.4163  val_F1=0.8242  val_AUROC=0.5835
+2026-03-08 10:53:16  INFO        Epoch  10  train_loss=1.1805  val_F1=0.8536  val_AUROC=0.7988
+2026-03-08 11:03:34  INFO        Epoch  20  train_loss=1.0316  val_F1=0.8891  val_AUROC=0.8669
+2026-03-08 11:13:52  INFO        Epoch  30  train_loss=0.9699  val_F1=0.9089  val_AUROC=0.8910
+2026-03-08 11:24:12  INFO        Epoch  40  train_loss=0.9349  val_F1=0.9170  val_AUROC=0.9011
+2026-03-08 11:34:31  INFO        Epoch  50  train_loss=0.9124  val_F1=0.9236  val_AUROC=0.9062
+2026-03-08 11:44:50  INFO        Epoch  60  train_loss=0.8983  val_F1=0.9271  val_AUROC=0.9073
+2026-03-08 11:55:12  INFO        Epoch  70  train_loss=0.8926  val_F1=0.9278  val_AUROC=0.9080
+2026-03-08 12:05:37  INFO        Epoch  80  train_loss=0.8916  val_F1=0.9281  val_AUROC=0.9081
+2026-03-08 12:05:37  INFO        Training time: 4958.4s, best val F1: 0.9284
+2026-03-08 12:05:43  INFO        Test F1:    0.9284 ± 0.0008
+2026-03-08 12:05:43  INFO        Test AUROC: 0.9081 ± 0.0008
+2026-03-08 12:05:43  INFO        Test AUPRC: 0.9495 ± 0.0005
+2026-03-08 12:05:43  INFO      Saved best baseline checkpoint to ../results/ablation_proteomics/best_baseline_model.pt
+2026-03-08 12:05:43  INFO      
+============================================================
+2026-03-08 12:05:43  INFO      PROTEOMICS ABLATION SUMMARY
+2026-03-08 12:05:43  INFO      ============================================================
+2026-03-08 12:05:43  INFO      Baseline (RNA+Prot): F1=0.9293, AUROC=0.9076, AUPRC=0.9492
+2026-03-08 12:05:43  INFO      RNA-only:            F1=0.9277, AUROC=0.9070, AUPRC=0.9487
+2026-03-08 12:05:43  INFO      Delta:               F1=+0.0016, AUROC=+0.0006, AUPRC=+0.0004
+2026-03-08 12:05:43  INFO      Results saved to ../results/ablation_proteomics/proteomics_ablation_results.json
+2026-03-08 12:05:43  INFO      
+############################################################
+2026-03-08 12:05:43  INFO      # PART 2: FBA EXPANSION (ALL TEST PATIENTS)
+2026-03-08 12:05:43  INFO      ############################################################
+2026-03-08 12:05:43  INFO      Loading Recon3D from /Users/thiptanawat/Documents/GitHub/MetaGNN/data/raw/recon3d_model.xml...
+2026-03-08 12:05:45  INFO      The current solver interface glpk doesn't support setting the optimality tolerance.
+2026-03-08 12:05:47  INFO        10600 reactions, 5835 metabolites
+2026-03-08 12:05:47  INFO      Loaded trained checkpoint from ../results/ablation_proteomics/best_baseline_model.pt
+2026-03-08 12:05:52  INFO      Generated predictions for 33 test patients
+2026-03-08 12:05:52  INFO      Prediction stats: mean=0.4025, std=0.3050, min=0.0000, max=1.0000
+2026-03-08 12:05:52  INFO      Active (>=0.15): 77.4%
+2026-03-08 12:05:52  INFO      
+Running FBA viability for 33 patients at τ=0.15...
+2026-03-08 12:05:53  INFO        ✓ TCGA-EB-5770-01A: biomass=472.5208, inactive=2402/10600, time=1.0s
+2026-03-08 12:05:54  INFO        ✓ TCGA-BE-1654-01A: biomass=426.7250, inactive=2391/10600, time=0.2s
+2026-03-08 12:05:54  INFO        ✓ TCGA-CB-1227-01A: biomass=425.4958, inactive=2399/10600, time=0.2s
+2026-03-08 12:05:54  INFO        ✓ TCGA-BD-4416-01A: biomass=368.7786, inactive=2396/10600, time=0.3s
+2026-03-08 12:05:54  INFO        ✓ TCGA-BA-6378-01A: biomass=426.3038, inactive=2383/10600, time=0.2s
+2026-03-08 12:05:55  INFO        ✓ TCGA-EF-2290-01A: biomass=449.3152, inactive=2408/10600, time=0.3s
+2026-03-08 12:05:55  INFO        ✓ TCGA-FE-3044-01A: biomass=429.0270, inactive=2407/10600, time=0.1s
+2026-03-08 12:05:55  INFO        ✓ TCGA-AF-4286-01A: biomass=383.5510, inactive=2406/10600, time=0.2s
+2026-03-08 12:05:55  INFO        ✓ TCGA-DA-4263-01A: biomass=379.6258, inactive=2376/10600, time=0.1s
+2026-03-08 12:05:55  INFO        ✓ TCGA-CB-2553-01A: biomass=386.0865, inactive=2401/10600, time=0.2s
+2026-03-08 12:05:55  INFO        ✓ TCGA-EE-8935-01A: biomass=430.2325, inactive=2406/10600, time=0.2s
+2026-03-08 12:05:56  INFO        ✓ TCGA-BB-9253-01A: biomass=386.0865, inactive=2392/10600, time=0.1s
+2026-03-08 12:05:56  INFO        ✓ TCGA-EA-8364-01A: biomass=411.7664, inactive=2394/10600, time=0.3s
+2026-03-08 12:05:56  INFO        ✓ TCGA-EB-6594-01A: biomass=329.5746, inactive=2415/10600, time=0.2s
+2026-03-08 12:05:56  INFO        ✓ TCGA-AA-4934-01A: biomass=386.0865, inactive=2375/10600, time=0.2s
+2026-03-08 12:05:57  INFO        ✓ TCGA-AC-8049-01A: biomass=418.7749, inactive=2376/10600, time=0.3s
+2026-03-08 12:05:57  INFO        ✗ TCGA-AC-8651-01A: biomass=0.0000, inactive=2396/10600, time=0.2s
+2026-03-08 12:05:57  INFO        ✓ TCGA-AD-3749-01A: biomass=466.6234, inactive=2389/10600, time=0.3s
+2026-03-08 12:05:57  INFO        ✓ TCGA-DD-2012-01A: biomass=422.2652, inactive=2389/10600, time=0.2s
+2026-03-08 12:05:57  INFO        ✓ TCGA-FF-4102-01A: biomass=460.5163, inactive=2399/10600, time=0.2s
+2026-03-08 12:05:58  INFO        ✓ TCGA-BA-7539-01A: biomass=426.3038, inactive=2384/10600, time=0.3s
+2026-03-08 12:05:58  INFO        ✓ TCGA-BD-1263-01A: biomass=419.3056, inactive=2438/10600, time=0.2s
+2026-03-08 12:05:58  INFO        ✓ TCGA-AD-4301-01A: biomass=426.7250, inactive=2372/10600, time=0.1s
+2026-03-08 12:05:58  INFO        ✓ TCGA-AE-1438-01A: biomass=379.1260, inactive=2403/10600, time=0.3s
+2026-03-08 12:05:59  INFO        ✓ TCGA-BA-1398-01A: biomass=412.8890, inactive=2382/10600, time=0.3s
+2026-03-08 12:05:59  INFO        ✓ TCGA-DE-6457-01A: biomass=426.3038, inactive=2396/10600, time=0.3s
+2026-03-08 12:05:59  INFO        ✓ TCGA-FA-5164-01A: biomass=413.9542, inactive=2407/10600, time=0.3s
+2026-03-08 12:05:59  INFO        ✓ TCGA-AB-1820-01A: biomass=386.0865, inactive=2397/10600, time=0.2s
+2026-03-08 12:06:00  INFO        ✓ TCGA-EF-5089-01A: biomass=422.7954, inactive=2398/10600, time=0.2s
+2026-03-08 12:06:00  INFO        ✓ TCGA-EB-3019-01A: biomass=463.5323, inactive=2375/10600, time=0.2s
+2026-03-08 12:06:00  INFO        ✓ TCGA-EF-7527-01A: biomass=376.6566, inactive=2406/10600, time=0.2s
+2026-03-08 12:06:00  INFO        ✓ TCGA-DB-2920-01A: biomass=415.8917, inactive=2379/10600, time=0.2s
+2026-03-08 12:06:00  INFO        ✓ TCGA-FF-5580-01A: biomass=382.9090, inactive=2391/10600, time=0.2s
+2026-03-08 12:06:00  INFO      
+Running random baseline (100 Monte Carlo trials)...
+2026-03-08 12:06:16  INFO        Trial 25/100: 6/25 viable
+2026-03-08 12:06:28  INFO        Trial 50/100: 10/50 viable
+2026-03-08 12:06:45  INFO        Trial 75/100: 20/75 viable
+2026-03-08 12:07:01  INFO        Trial 100/100: 29/100 viable
+2026-03-08 12:07:01  INFO      
+============================================================
+2026-03-08 12:07:01  INFO      FBA EXPANSION SUMMARY (33 test patients)
+2026-03-08 12:07:01  INFO      ============================================================
+2026-03-08 12:07:01  INFO      MetaGNN viable: 32/33 (97%)
+2026-03-08 12:07:01  INFO      Biomass range: 329.5746 – 472.5208 mmol/gDW/h
+2026-03-08 12:07:01  INFO      Biomass mean: 412.8698 ± 31.4238
+2026-03-08 12:07:01  INFO      Random baseline: 29/100 viable (29%)
+2026-03-08 12:07:01  INFO      Results saved to ../results/fba_expansion/fba_expansion_results.json
+2026-03-08 12:07:01  INFO      
+############################################################
+2026-03-08 12:07:01  INFO      ALL EXPERIMENTS COMPLETE — Total time: 8.1h
+2026-03-08 12:07:01  INFO      ############################################################
