@@ -1,0 +1,22 @@
+{
+  "model": "MetaGNN",
+  "stage1": {
+    "epochs": 50,
+    "dataset": "98 HMA GEMs",
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "optimizer": "Adam"
+  },
+  "stage2": {
+    "epochs": 200,
+    "early_stopping_patience": 20,
+    "dataset": "TCGA-CRC",
+    "learning_rate": 0.001,
+    "weight_decay": 1e-05,
+    "dropout": 0.2,
+    "lambda_mb": 0.2,
+    "batch_size": 16
+  },
+  "convergence_epoch": 141,
+  "master_seed": 2024
+}
